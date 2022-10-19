@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: warehouse_fastapi_app
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - .env
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    working_dir: /var/www
+    links:
+      - db
+    volumes:
+      - .:/var/www
+    ports:
+      - ${UVICORN_HOST}:${UVICORN_PORT}:8000
+    networks:
+      - app-network
+
+  db:
+    image: postgres
+    container_name: warehouse_fastapi_db
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD: ${PGSQL_PASSWORD}
+      POSTGRES_USER: ${PGSQL_USER_NAME}
+      POSTGRES_DB: ${PGSQL_DB_NAME}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - ${PGSQL_HOST}:${PGSQL_PORT}:5432
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  pg_data:
+    driver: local
+
