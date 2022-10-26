@@ -5,7 +5,7 @@ _log_format = f"%(asctime)s - [%(levelname)s] - %(name)s - (%(filename)s).%(func
 formatter = logging.Formatter(_log_format)
 
 
-logger = logging.getLogger('warehouse')
+logger = logging.getLogger('custom_recipes')
 logger.setLevel(logging.DEBUG)
 
 c_handler = logging.StreamHandler()
