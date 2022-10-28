@@ -1,10 +1,16 @@
 from fastapi import Depends, APIRouter, HTTPException, status
 from sqlalchemy.orm import Session
 
-from src.auth.models import User
-from src.core.database import get_db
-from . import services, hashing, schemas, validator
-from .jwt import create_access_token
+from auth.models import User
+from core.database import get_db
+from core.logging import logger
+from . import (
+    services,
+    hashing,
+    schemas,
+    validator,
+    jwt
+)
 
 
 router = APIRouter()
@@ -13,11 +19,6 @@ router = APIRouter()
 @router.get('/users', response_model=schemas.UserList)
 async def get_all_users(db: Session = Depends(get_db)):
     return await services.get_all_users(db)
-
-
-@router.get('/users/{id}')
-async def get_detail_user(id: int, db: Session = Depends(get_db)):
-    return await services.get_detail_user(db, id)
 
 
 @router.post('/create', status_code=status.HTTP_201_CREATED)
@@ -43,6 +44,6 @@ def login(request: schemas.Login, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='Invalid Password')
 
     # Generate a JWT Token
-    access_token = create_access_token(data={'id': user.id, 'sub': user.name})
+    access_token = jwt.create_access_token(data={'id': user.id, 'sub': user.name})
 
     return {"access_token": access_token, "token_type": "bearer"}

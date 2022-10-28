@@ -2,7 +2,7 @@ import enum
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, Field, validator
-from src.core.logging import logger
+from core.logging import logger
 
 
 class UserTypeEnum(enum.Enum):
@@ -12,12 +12,10 @@ class UserTypeEnum(enum.Enum):
 
 class UserBase(BaseModel):
     name: str
-    type1: UserTypeEnum
+    type: UserTypeEnum
 
-    @validator('type1')
-    def get_type_value(cls, v):
-        logger.info(v)
-        return v.value
+    class Config:
+        use_enum_values = True
 
 
 class UserCreate(UserBase):
