@@ -9,7 +9,7 @@ class ProductBase(BaseModel):
     count: int
 
 
-class ProductCreate(BaseModel):
+class ProductCreate(ProductBase):
     pass
 
 

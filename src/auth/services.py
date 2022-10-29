@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from . import models
 from . import schemas
@@ -18,3 +18,11 @@ async def get_all_users(db: Session) -> schemas.UserList:
     users = db.query(models.User).all()
     logger.info(*users)
     return schemas.UserList(__root__=users)
+
+
+def get_user_by_id(db: Session, user_id: int) -> schemas.UserSingle:
+    user = db.query(models.User).get(user_id)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Cannot find any user with such data!')
+    return schemas.UserSingle(**user.__dict__)
+
