@@ -25,7 +25,7 @@ def add_product(item: schemas.ProductCreate,
     return services.add_product(db, item, current_user.id)
 
 
-@router.post('/{product_id}/buy', response_model=schemas.ProductSingle)
+@router.post('/buy/{product_id}', response_model=schemas.UserCartSingle)
 def buy_product(product_id: int,
                 db: Session = Depends(get_db),
                 current_user: TokenData = Depends(get_current_user)
@@ -34,6 +34,4 @@ def buy_product(product_id: int,
     if services.is_user_seller(user):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='You cannot do that!')
 
-    return services.buy_product(db, user, product_id)
-
-
+    return services.buy_product(db, user.id, product_id)

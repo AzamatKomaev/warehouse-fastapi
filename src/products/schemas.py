@@ -14,6 +14,7 @@ class ProductCreate(ProductBase):
 
 
 class ProductSingle(ProductBase):
+    id: int
     user_id: int
     created_at: datetime
     updated_at: datetime
@@ -24,3 +25,15 @@ class ProductSingle(ProductBase):
 
 class ProductList(BaseModel):
     __root__: List[ProductSingle]
+
+
+class UserCartSingle(BaseModel):
+    id: int
+    user_id: int
+    product_id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        orm_mode = True
+

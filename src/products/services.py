@@ -1,9 +1,7 @@
 from typing import List
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from auth.services import get_user_by_id
 from auth.schemas import UserSingle
-from core.logging import logger
 from . import models, schemas
 
 
@@ -22,7 +20,6 @@ def get_product_by_id(db: Session, product_id: int) -> models.Product:
 
 def get_products_list(db: Session) -> List[models.Product]:
     products = db.query(models.Product).all()
-    logger.info(type(products))
     return products
 
 
@@ -35,12 +32,16 @@ def add_product(db: Session, item: schemas.ProductCreate, user_id: int) -> model
     return product
 
 
-def buy_product(db: Session, user: UserSingle, product_id: int):
+def buy_product(db: Session, user_id: int, product_id: int) -> models.UserCart:
+    """Buy any product by only users with type buyer. Return user cart with product_id and user_id."""
     product = get_product_by_id(db, product_id)
 
     if product.count == 0:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='There are no more items of the product')
 
+    cart = models.UserCart(user_id=user_id, product_id=product_id)
     product.count -= 1
-
-
+    db.add(cart)
+    db.commit()
+    db.refresh(product)
+    return cart
