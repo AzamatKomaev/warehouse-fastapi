@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from auth.models import User
 from core.database import get_db
-from core.logging import logger
 from . import (
     services,
     hashing,
@@ -17,20 +16,20 @@ router = APIRouter()
 
 
 @router.get('/users', response_model=schemas.UserList)
-async def get_all_users(db: Session = Depends(get_db)):
-    return await services.get_all_users(db)
+def get_all_users(db: Session = Depends(get_db)):
+    return services.get_all_users(db)
 
 
 @router.post('/create', status_code=status.HTTP_201_CREATED)
-async def create_user_registration(request: schemas.UserCreate, db: Session = Depends(get_db)):
-    user = await validator.verify_name_exist(db, request.name)
+def create_user_registration(request: schemas.UserCreate, db: Session = Depends(get_db)):
+    user = validator.verify_name_exist(db, request.name)
     if user:
         raise HTTPException(
             status_code=400,
             detail="The user with this name already exists in the system.",
         )
 
-    new_user = await services.register_new_user(db, request)
+    new_user = services.register_new_user(db, request)
     return new_user
 
 

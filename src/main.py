@@ -1,7 +1,11 @@
 import sys
 import pathlib
+import uvicorn
+from dotenv import load_dotenv
 from fastapi import FastAPI
 
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -18,3 +22,7 @@ def add_routers():
 
 
 add_routers()
+
+if __name__ == "__main__":
+    uvicorn.run('main:app', host="0.0.0.0", port=8000, log_level="info", reload=True)
+
