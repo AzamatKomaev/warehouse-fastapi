@@ -16,7 +16,6 @@ from products.models import Product, UserCart
 # access to the values within the .ini file in use.
 config = context.config
 
-
 # set up database url.
 if app_config.APP_ENV == 'test':
     config.set_main_option('sqlalchemy.url', SQLALCHEMY_TEST_DATABASE_URL)
