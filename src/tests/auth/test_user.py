@@ -1,10 +1,24 @@
 import pytest
+import requests
 from sqlalchemy.orm import Session
+from auth.models import User
+from core.config import FULL_UVICORN_PATH
+from core.logging import logger
+from ..services import get_data_from_file
+
+
+@pytest.fixture
+def set_up_user_tests(db: Session):
+    """What to do before and after each user test."""
+    yield
+    db.query(User).delete()
 
 
 @pytest.mark.user
 def test_auth_empty_data(db: Session):
-    assert 0 == 0
+    data = get_data_from_file(directory='auth', file_name='empty_creating_user_data.json')
+    response = requests.post(f'{FULL_UVICORN_PATH}/auth/create', data=data)
+    assert response.status_code == 422
 
 
 @pytest.mark.user
