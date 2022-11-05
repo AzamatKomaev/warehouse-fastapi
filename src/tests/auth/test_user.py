@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 
 @pytest.mark.user
-def test_invalid_data_creating_user(db: Session):
+def test_auth_empty_data(db: Session):
     assert 0 == 0
 
 

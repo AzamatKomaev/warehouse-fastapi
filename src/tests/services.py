@@ -1,4 +1,5 @@
 import os
+import json
 from sqlalchemy.orm import Session
 from core.logging import logger
 
@@ -24,4 +25,7 @@ def after_tests(db: Session) -> None:
         raise ValueError('Could not run after.sh script.')
 
 
-
+def get_data_from_file(directory: str, file_name: str) -> dict:
+    with open(f'{directory}/data/{file_name}', 'r') as f:
+        json_data = json.load(f)
+    return json_data
