@@ -6,8 +6,6 @@ from alembic import context
 
 from core.database import Base
 from core.database import SQLALCHEMY_DATABASE_URL
-from core.test_database import SQLALCHEMY_TEST_DATABASE_URL
-from core import config as app_config
 from auth.models import User
 from products.models import Product, UserCart
 
@@ -16,11 +14,8 @@ from products.models import Product, UserCart
 # access to the values within the .ini file in use.
 config = context.config
 
-# set up database url.
-if app_config.APP_ENV == 'test':
-    config.set_main_option('sqlalchemy.url', SQLALCHEMY_TEST_DATABASE_URL)
-else:
-    config.set_main_option('sqlalchemy.url', SQLALCHEMY_DATABASE_URL)
+
+config.set_main_option('sqlalchemy.url', SQLALCHEMY_DATABASE_URL)
 
 
 # Interpret the config file for Python logging.

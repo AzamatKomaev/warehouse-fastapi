@@ -8,8 +8,6 @@ file in root folder and add these vars there!
 ###################################################################################################
 """
 
-APP_ENV = os.getenv('APP_ENV', 'dev')
-
 PGSQL_DEV_DB_NAME = os.getenv('PGSQL_DEV_DB_NAME', 'dev_warehouse')
 PGSQL_TEST_DB_NAME = os.getenv('PGSQL_TEST_DB_NAME', 'test_warehouse')
 

@@ -1,9 +1,8 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
+from auth.hashing import get_password_hash
 from . import models
 from . import schemas
-from auth.hashing import get_password_hash
-from core.logging import logger
 
 
 def register_new_user(db: Session, request) -> models.User:
@@ -16,7 +15,6 @@ def register_new_user(db: Session, request) -> models.User:
 
 def get_all_users(db: Session) -> schemas.UserList:
     users = db.query(models.User).all()
-    logger.info(*users)
     return schemas.UserList(__root__=users)
 
 

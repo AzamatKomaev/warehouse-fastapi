@@ -1,13 +1,20 @@
 import pytest
-from core.test_database import override_get_db
 
-from . import services
+from fastapi.testclient import TestClient
+from sqlalchemy.orm import scoped_session
+
+from core.test_database import TestingSessionLocal, app
 
 
-@pytest.fixture(autouse=True, scope='session')
+@pytest.fixture()
 def db():
-    """What to do before and after all tests."""
-    db = next(override_get_db())
-    services.before_tests()
-    yield db
-    services.after_tests()
+    Session = scoped_session(TestingSessionLocal)
+    session = Session()
+    yield session
+    session.close()
+
+
+@pytest.fixture()
+def client():
+    with TestClient(app) as client:
+        yield client
