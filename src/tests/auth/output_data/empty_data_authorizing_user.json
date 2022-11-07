@@ -1,0 +1,23 @@
+{
+  "detail": [
+    {
+      "loc": [
+        "body",
+        "type"
+      ],
+      "msg": "field required",
+      "type": "value_error.missing"
+    },
+    {
+      "loc": [
+        "body",
+        "password"
+      ],
+      "msg": "ensure this value has at least 8 characters",
+      "type": "value_error.any_str.min_length",
+      "ctx": {
+        "limit_value": 8
+      }
+    }
+  ]
+}
