@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: warehouse
+  labels:
+    app-label: warehouse-label
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app-label: warehouse-label
+  template:
+    metadata:
+      labels:
+        app-label: warehouse-label
+    spec:
+      containers:
+      - name: warehouse-app
+        image: cr.yandex/crprer8t0jju1cplobf3/warehouse:v1
+        envFrom:
+          - secretRef:
+              name: mysql-connection-data-8tmmdddg2t  # using name with suffix. todo: change to another method of using secrets

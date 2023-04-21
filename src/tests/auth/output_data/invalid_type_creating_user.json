@@ -1,0 +1,10 @@
+{
+    "detail": [
+        {
+            "loc": ["body", "type"],
+            "msg": "value is not a valid enumeration member; permitted: 'seller', 'buyer'",
+            "type": "type_error.enum",
+            "ctx": {"enum_values": ["seller", "buyer"]}
+        }
+    ]
+}

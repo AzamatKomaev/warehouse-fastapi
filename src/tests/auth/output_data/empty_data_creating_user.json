@@ -1,0 +1,16 @@
+{
+    "detail": [
+        {
+            "loc": ["body", "type"],
+            "msg": "value is not a valid enumeration member; permitted: 'seller', 'buyer'",
+            "type": "type_error.enum",
+            "ctx": {"enum_values": ["seller", "buyer"]}
+        },
+        {
+            "loc": ["body", "password"],
+            "msg": "ensure this value has at least 8 characters",
+            "type": "value_error.any_str.min_length",
+            "ctx": {"limit_value": 8}
+        }
+    ]
+}
