@@ -1,0 +1,20 @@
+name: GitHub actions
+
+env:
+  YC_AUTH_KEY_JSON: ${{ secrets.YC_AUTH_KEY_JSON }}
+  
+on: workflow_dispatch
+
+jobs:
+  set-up-yc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install and configure Yandex Cloud
+        run: |
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+          echo $YC_AUTH_KEY_JSON > key.json
+          cat key.json
+          yc config profile create bitbucket
+          yc config set service-account-key key.json
+          yc config profile list
