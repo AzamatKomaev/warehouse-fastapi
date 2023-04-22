@@ -29,12 +29,9 @@ jobs:
         run: ~/yandex-cloud/bin/yc config set folder-id $FOLDER_ID
       - name: Install kubectl
         run: |
-          pwd
-          ls -l
           curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-          chmod +x ./kubectl
-          ./kubectl version
-
+          mv ./kubectl ~/
+          chmod +x ~/kubectl
       - name: Set up k8s credentials
         run: yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Test k8s
