@@ -34,8 +34,6 @@ jobs:
           chmod +x ~/kubectl
       - name: Set up k8s credentials
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
-      - name: Move kubectl file and config to k8s folder
-        run: mkdir ~/k8s && mv ~/kubectl ~/k8s && mv ~/.kube ~/k8s
       - name: Set up docker registry
         run: ~/yandex-cloud/bin/yc container registry configure-docker
       - uses: actions/upload-artifact@master
