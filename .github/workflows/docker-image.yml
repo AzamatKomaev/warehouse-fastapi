@@ -28,6 +28,11 @@ jobs:
         run: ~/yandex-cloud/bin/yc config set cloud-id $CLOUD_ID
       - name: Set up folder-id
         run: ~/yandex-cloud/bin/yc config set folder-id $FOLDER_ID
-
       - name: Get k8s cluster
+        run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
+
+  test-another-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test yc
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
