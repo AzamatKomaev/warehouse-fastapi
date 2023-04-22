@@ -33,6 +33,7 @@ jobs:
 
   test-another-task:
     runs-on: ubuntu-latest
+    needs: set-up-yc
     steps:
       - name: test yc
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
