@@ -13,7 +13,7 @@ jobs:
       - name: Install Yandex Cloud
         run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
       - name: Activate yc
-        run: source /home/runner/.bashrc
+        run: exec bash -l
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
