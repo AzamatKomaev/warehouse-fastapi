@@ -4,11 +4,12 @@ env:
   YC_AUTH_KEY_JSON: ${{ secrets.YC_AUTH_KEY_JSON }}
   CLOUD_ID: ${{ secrets.CLOUD_ID }}
   FOLDER_ID: ${{ secrets.FOLDER_ID }}
+  K8S_ID: ${{ secrets.K8S_ID }}
   
 on: workflow_dispatch
 
 jobs:
-  set-up-yandex-cloud:
+  set-up:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,8 +19,6 @@ jobs:
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
           cat key.json
-      - name: Check yc installed
-        run: ls ~/
       - name: Configure profile for yc
         run: |
           ~/yandex-cloud/bin/yc config profile create bitbucket
@@ -28,21 +27,16 @@ jobs:
         run: ~/yandex-cloud/bin/yc config set cloud-id $CLOUD_ID
       - name: Set up folder-id
         run: ~/yandex-cloud/bin/yc config set folder-id $FOLDER_ID
-      - uses: actions/upload-artifact@master
-        with:
-          name: yc
-          path: ~/yandex-cloud
+      - name: Install kubectl
+        run: |
+          pwd
+          ls -l
+          curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+          chmod +x ./kubectl
+          ./kubectl version
 
-  test-another-task:
-    runs-on: ubuntu-latest
-    needs: set-up-yandex-cloud
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@master
-        with:
-          name: yc
-          path: ~/yandex-cloud
-      - name: Make yc executable
-        run: chmod +x ~/yandex-cloud/bin/yc
-      - name: Test yc
-        run: ~/yandex-cloud/bin/yc resource-manager cloud list
+      - name: Set up k8s credentials
+        run: yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
+      - name: Test k8s
+        run: ~/kubectl get all
+
