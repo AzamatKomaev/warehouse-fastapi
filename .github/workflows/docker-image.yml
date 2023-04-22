@@ -13,6 +13,7 @@ jobs:
       - name: Install and configure Yandex Cloud
         run: |
           curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+          source /home/runner/.bashrc
           echo $YC_AUTH_KEY_JSON > key.json
           cat key.json
           yc config profile create bitbucket
