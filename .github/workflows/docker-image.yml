@@ -35,7 +35,7 @@ jobs:
 
   test-another-task:
     runs-on: ubuntu-latest
-    needs: set-up-yc
+    needs: set-up-yandex-cloud
     steps:
       - uses: actions/checkout@v3
       - uses: actions/download-artifact@master
