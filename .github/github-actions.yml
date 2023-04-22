@@ -1,0 +1,29 @@
+name: GitHub actions
+
+env:
+  SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+  SERVER_URL: https://api.voiceofossetia.ru
+  YC_AUTH_KEY_JSON: ${{ secrets.YC_AUTH_KEY_JSON }}
+  SSH_HOST: ${{ secrets.SSH_HOST }}
+  SSH_USER: ${{ secrets.SSH_USER }}
+
+#on:
+#  push:
+#    branches: [ master ]
+
+on: workflow_dispatch
+
+
+jobs:
+  set-up-yc:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install and configure Yandex Cloud
+        run: |
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+          echo $YC_AUTH_KEY_JSON > key.json
+          cat key.json
+          yc config profile create bitbucket
+          yc config set service-account-key key.json
+          yc config profile list

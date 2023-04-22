@@ -8,9 +8,6 @@
 
 image: atlassian/default-image:4
 
-
-
-
 pipelines:
   branches:
     master:
