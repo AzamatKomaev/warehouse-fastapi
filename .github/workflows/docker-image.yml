@@ -5,6 +5,8 @@ env:
   CLOUD_ID: ${{ secrets.CLOUD_ID }}
   FOLDER_ID: ${{ secrets.FOLDER_ID }}
   K8S_ID: ${{ secrets.K8S_ID }}
+  REGISTRY_ID: ${{ secrets.REGISTRY_ID }}
+  APPLICATION_ENV_DATA: ${{ secrets.APPLICATION_ENV_DATA }}
   
 #on: workflow_dispatch
 
@@ -13,7 +15,7 @@ on:
     branches: [ master ]
 
 jobs:
-  set-up:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -40,25 +42,12 @@ jobs:
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Set up docker registry
         run: ~/yandex-cloud/bin/yc container registry configure-docker
-      - uses: actions/upload-artifact@master
-        with:
-          name: .kube
-          path: ~/.kube
-      - uses: actions/upload-artifact@master
-        with:
-          name: kubectl
-          path: ~/kubectl
+      - name: Set up env variables
+        run: echo $APPLICATION_ENV_DATA > ./prod/.env
+      - name: Build docker image
+        run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
+      - name: Deploy kustomization
+        run: kubectl apply -k ./prod
+      - name: Deploy docker image
+        run: kubectl apply -f ./prod/warehouse.yaml
 
-  build:
-    needs: set-up
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v3
-      - name: Move files from artifact to default folder
-        run: mv ./.kube ~/ && mv ./kubectl/kubectl ~/
-      - name: Make kubectl executable
-        run: chmod +x ~/kubectl
-      - name: Get all k8s resources
-        run: ~/kubectl get all --kubeconfig ~/.kube/config
