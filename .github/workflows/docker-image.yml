@@ -40,8 +40,8 @@ jobs:
         with:
           name: my-artifact
           path: | 
-            ~/kubectl
             ~/.kube
+            ~/kubectl
 
   build:
     needs: set-up
