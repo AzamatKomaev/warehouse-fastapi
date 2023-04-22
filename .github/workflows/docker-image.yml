@@ -54,5 +54,7 @@ jobs:
         run: mv ~/k8s/* ~/
       - name: Make kubectl executable
         run: chmod +x ~/kubectl
+      - name: Get all content of home path
+        run: ls -l ~/
       - name: Get all k8s resources
         run: ~/kubectl get all --kubeconfig ~/.kube/config
