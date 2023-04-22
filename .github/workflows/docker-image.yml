@@ -2,6 +2,8 @@ name: GitHub actions
 
 env:
   YC_AUTH_KEY_JSON: ${{ secrets.YC_AUTH_KEY_JSON }}
+  CLOUD_ID: ${{ secrets.CLOUD_ID }}
+  FOLDER_IR: ${{ secrets.FOLDER_ID }}
   
 on: workflow_dispatch
 
@@ -22,6 +24,9 @@ jobs:
         run: |
           ~/yandex-cloud/bin/yc config profile create bitbucket
           ~/yandex-cloud/bin/yc config set service-account-key key.json
+      - name: Set up cloud-id
+        run: ~/yandex-cloud/bin/yc config set cloud-id $CLOUD_ID
+      - name: Set up folder-id
+        run: ~/yandex-cloud/bin/yc config set folder-id $FOLDER_ID
       - name: Get k8s cluster
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
-
