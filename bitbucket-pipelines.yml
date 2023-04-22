@@ -1,0 +1,26 @@
+# Template docker-push
+
+# This template allows you to build and push your docker image to a Docker Hub account.
+# The workflow allows running tests, code linting and security scans on feature branches (as well as master).
+# The docker image will be validated and pushed to the docker registry after the code is merged to master.
+
+# Prerequisites: $DOCKERHUB_USERNAME, $DOCKERHUB_PASSWORD setup as deployment variables
+
+image: atlassian/default-image:4
+
+
+
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Set up Yandex Cloud
+          script:
+            # install yc (yandex cloud ctl)
+            - curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+            - echo $YC_KEY_JSON > key.json
+            - yc config profile create bitbucket
+            - yc config set service-account-key key.json
+            - yc config profile list
+            
