@@ -36,25 +36,25 @@ jobs:
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Move kubectl file and config to k8s folder
         run: mkdir ~/k8s && mv ~/kubectl ~/k8s && mv ~/.kube ~/k8s
+      - name: Set up docker registry
+        run: ~/yandex-cloud/bin/yc container registry configure-docker
       - uses: actions/upload-artifact@master
         with:
-          name: kubectl
-          path: ~/k8s
+          name: my-artifact
+          path: | 
+            ~/kubectl
+            ~/.kube
 
   build:
     needs: set-up
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/download-artifact@master
-        with:
-          name: kubectl
-          path: ~/k8s
-      - name: Move k8s files from k8s
-        run: mv ~/k8s/* ~/
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+      - name: Check default folder
+        run: ls -l ~
       - name: Make kubectl executable
         run: chmod +x ~/kubectl
-      - name: Get all content of home path
-        run: ls -l ~/
       - name: Get all k8s resources
         run: ~/kubectl get all --kubeconfig ~/.kube/config
