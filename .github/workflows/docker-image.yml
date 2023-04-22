@@ -42,7 +42,7 @@ jobs:
         run: ~/yandex-cloud/bin/yc container registry configure-docker
       - uses: actions/upload-artifact@master
         with:
-          name: kube-config
+          name: .kube
           path: ~/.kube
       - uses: actions/upload-artifact@master
         with:
@@ -58,10 +58,10 @@ jobs:
         uses: actions/download-artifact@v3
       - name: Get folder files
         run: ls -l ./
-      - name: Get kube-config files
-        run: ls -l ./kube-config
+      - name: Get kubectl files
+        run: ls -l ./kubectl
       - name: Move files from artifact to default folder
-        run: mv ./kube-config/* ~/ && mv ./kubectl ~/
+        run: mv ./.kube ~/ && mv ./kubectl ~/
       - name: Make kubectl executable
         run: chmod +x ~/kubectl
       - name: Get all k8s resources
