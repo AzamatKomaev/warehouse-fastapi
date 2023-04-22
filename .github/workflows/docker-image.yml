@@ -42,5 +42,9 @@ jobs:
         with:
           name: yc
           path: ~/yandex-cloud
+      - name: ls -l
+        run: ls -l ~/yandex-cloud/bin
+      - name: Make yc executable
+        run: chmod ugo+x ~/yandex-cloud/bin/yc
       - name: Test yc
-        run: ~/yandex-cloud/bin/yc resource-manager cloud list
+        run: . ~/yandex-cloud/bin/yc resource-manager cloud list
