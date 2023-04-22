@@ -12,14 +12,14 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Yandex Cloud
         run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-      - name: Activate yc
-        run: bash && source /home/runner/.bashrc
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
           cat key.json
+      - name: Check yc installed
+        run: ls ~/
       - name: Configure profile for yc
         run: |
-          yc config profile create bitbucket
-          yc config set service-account-key key.json
-          yc config profile list
+          ~/yandex-cloud/bin/yc config profile create bitbucket
+          ~/yandex-cloud/bin/yc config set service-account-key key.json
+          ~/yandex-cloud/bin/yc config profile list
