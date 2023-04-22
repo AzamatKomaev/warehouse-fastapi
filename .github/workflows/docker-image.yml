@@ -56,10 +56,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
-      - name: Get artifact files
-        run: ls -l ./my-artifact
+      - name: Get folder files
+        run: ls -l ./
+      - name: Get kube-config files
+        run: ls -l ./kube-config
       - name: Move files from artifact to default folder
-        run: mv ./my-artifact/* ~/
+        run: mv ./kube-config/* ~/ && mv ./kubectl ~/
       - name: Make kubectl executable
         run: chmod +x ~/kubectl
       - name: Get all k8s resources
