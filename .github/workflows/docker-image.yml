@@ -33,7 +33,7 @@ jobs:
           mv ./kubectl ~/
           chmod +x ~/kubectl
       - name: Set up k8s credentials
-        run: yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
+        run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Test k8s
         run: ~/kubectl get all
 
