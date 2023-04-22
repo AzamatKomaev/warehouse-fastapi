@@ -10,12 +10,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install and configure Yandex Cloud
+      - name: Install Yandex Cloud
+        run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+      - name: Activate yc
+        run: source /home/runner/.bashrc
+      - name: Create key.json
         run: |
-          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-          source /home/runner/.bashrc
           echo $YC_AUTH_KEY_JSON > key.json
           cat key.json
+      - name: Configure profile for yc
+        run: |
           yc config profile create bitbucket
           yc config set service-account-key key.json
           yc config profile list
