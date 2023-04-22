@@ -22,4 +22,6 @@ jobs:
         run: |
           ~/yandex-cloud/bin/yc config profile create bitbucket
           ~/yandex-cloud/bin/yc config set service-account-key key.json
-          ~/yandex-cloud/bin/yc config profile list
+      - name: Get k8s cluster
+        run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
+
