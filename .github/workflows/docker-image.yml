@@ -43,4 +43,4 @@ jobs:
           name: yc
           path: ~/yandex-cloud
       - name: Test yc
-        run:  yc resource-manager cloud list
+        run: ~/yandex-cloud/bin/yc resource-manager cloud list
