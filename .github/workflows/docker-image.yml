@@ -50,8 +50,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
-      - name: Check default folder
-        run: ls -l ~
+      - name: Check folder
+        run: ls -l
       - name: Make kubectl executable
         run: chmod +x ~/kubectl
       - name: Get all k8s resources
