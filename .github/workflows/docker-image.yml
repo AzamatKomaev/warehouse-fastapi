@@ -6,7 +6,11 @@ env:
   FOLDER_ID: ${{ secrets.FOLDER_ID }}
   K8S_ID: ${{ secrets.K8S_ID }}
   
-on: workflow_dispatch
+#on: workflow_dispatch
+
+on:
+  push:
+    branches: [ master ]
 
 jobs:
   set-up:
@@ -39,7 +43,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: my-artifact
-          path: ~/kubectl
+          path: ~/.kube
 
   build:
     needs: set-up
