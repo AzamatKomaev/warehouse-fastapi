@@ -55,6 +55,4 @@ jobs:
       - name: Make kubectl executable
         run: chmod +x ~/kubectl
       - name: Get all k8s resources
-        run: ~/kubectl get all
-
-
+        run: ~/kubectl get all --kubeconfig ~/.kube.config
