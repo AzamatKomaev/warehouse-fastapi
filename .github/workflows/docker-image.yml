@@ -34,6 +34,31 @@ jobs:
           chmod +x ~/kubectl
       - name: Set up k8s credentials
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
-      - name: Test k8s
+      - uses: actions/upload-artifact@master
+        with:
+          name: kubectl
+          path: ~/kubectl
+      - uses: actions/upload-artifact@master
+        with:
+          name: kubectl-config
+          path: ~/.kube/config
+
+  build:
+    needs: set-up
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: kubectl
+          path: ~/kubectl
+      - uses: actions/download-artifact@master
+        with:
+          name: kubectl-config
+          path: ~/.kube/config
+      - name: Make kubectl executable
+        run: chmod +x ~/kubectl
+      - name: Get all k8s resources
         run: ~/kubectl get all
+
 
