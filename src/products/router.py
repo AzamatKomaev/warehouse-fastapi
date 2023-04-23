@@ -9,6 +9,12 @@ from . import schemas, services
 router = APIRouter()
 
 
+# todo: delete (only for test ci/cd)
+@router.get("/test_work", status_code=status.HTTP_200_OK)
+def test_work(db: Session = Depends(get_db)):
+    return "Hello world! It works!"
+
+
 @router.get('/', response_model=schemas.ProductList)
 def get_all_products(db: Session = Depends(get_db)):
     return services.get_products_list(db)
