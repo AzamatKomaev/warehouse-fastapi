@@ -20,4 +20,4 @@ spec:
         image: cr.yandex/crprer8t0jju1cplobf3/warehouse:v1
         envFrom:
           - secretRef:
-              name: mysql-connection-data-8tmmdddg2t  # using name with suffix. todo: change to another method of using secrets
+              name: mysql-connection-data-8tmmdddg2t  # using name with suffix. todo: change to another method of using secrets (using envstub)

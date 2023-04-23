@@ -15,12 +15,13 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install Yandex Cloud
-        run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+        run: |
+          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
@@ -50,4 +51,11 @@ jobs:
         run: kubectl apply -k ./prod
       - name: Deploy docker image
         run: kubectl apply -f ./prod/warehouse.yaml
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check folders
+        run: ls -l ~
 
