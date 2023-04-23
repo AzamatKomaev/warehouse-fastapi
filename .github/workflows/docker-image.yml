@@ -7,7 +7,7 @@ env:
   K8S_ID: ${{ secrets.K8S_ID }}
   REGISTRY_ID: ${{ secrets.REGISTRY_ID }}
   APPLICATION_ENV_DATA: ${{ secrets.APPLICATION_ENV_DATA }}
-  
+
 #on: workflow_dispatch
 
 on:
@@ -21,6 +21,19 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Yandex Cloud
         run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+      - name: Upload yc artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: yc
+          path: ~/yandex-cloud
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download yc artifact
+        uses: actions/download-artifact@master
+        with:
+          name: yc
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
@@ -37,35 +50,17 @@ jobs:
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Set up docker registry
         run: ~/yandex-cloud/bin/yc container registry configure-docker
-      - name: Archive .kube config and yc into zip
-        run: zip yc-kube-config.zip ~/yandex-cloud/bin/yc ~/.kube/config
-      - name: Upload yc-kube-config artifact
-        uses: actions/upload-artifact@master
-        with:
-         name: yc-kube-config
-         path: yc-kube-config.zip
-#      - name: Set up env variables
-#        run: echo $APPLICATION_ENV_DATA > ./prod/.env
-#      - name: Build docker image
-#        run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
-#      - name: Deploy kustomization
-#        run: kubectl apply -k ./prod
-#      - name: Deploy docker image
-#        run: kubectl apply -f ./prod/warehouse.yaml
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download yc-kube-config artifact
-        uses: actions/download-artifact@master
-        with:
-          name: yc-kube-config
-      - name: Extract yc and kubeconfig
-        run: | 
-          unzip yc-kube-config.zip
-          mv ./home/runner/* ~/
       - name: Use yc
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
       - name: Use kubectl
         run: kubectl get all
-
+      - name: Set up env variables
+        run: echo $APPLICATION_ENV_DATA > ./prod/.env
+      - name: Build docker image
+        run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
+      - name: Push docker image
+        run: docker push cr.yandex/$REGISTRY_ID/warehouse:v1
+      - name: Deploy kustomization
+        run: kubectl apply -k ./prod
+      - name: Deploy docker image
+        run: kubectl apply -f ./prod/warehouse.yaml
