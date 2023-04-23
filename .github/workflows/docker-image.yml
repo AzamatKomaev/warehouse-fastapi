@@ -7,6 +7,7 @@ env:
   K8S_ID: ${{ secrets.K8S_ID }}
   REGISTRY_ID: ${{ secrets.REGISTRY_ID }}
   APPLICATION_ENV_DATA: ${{ secrets.APPLICATION_ENV_DATA }}
+  APP_IP: ${{ secrets.APP_IP }}
 
 #on: workflow_dispatch
 
@@ -19,27 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      # set up
       - name: Install Yandex Cloud
         run: curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-      - name: Upload yc artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: yc
-          path: ~/yandex-cloud
-  build:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download yc artifact
-        uses: actions/download-artifact@master
-        with:
-          name: yc
-          path: ~/yandex-cloud
-      - name: Make yc executable
-        run: chmod +x ~/yandex-cloud/bin/yc
-      - name: Get all files from yandex-cloud/bin
-        run: ls -l ~/yandex-cloud/bin/
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
@@ -58,13 +41,21 @@ jobs:
         run: cat ./key.json | docker login --username json_key --password-stdin cr.yandex
       - name: Check is docker registry configured
         run: cat ~/.docker/config.json
+
+      # build
       - name: Set up env variables
-        run: echo $APPLICATION_ENV_DATA > ./prod/.env
-      - name: Build docker image
+        run: echo $APPLICATION_ENV_DATA > ./prod/.env && . ./prod/.env
+      - name: Build
         run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
+
+      # test
+      - name: Tests
+        run: echo "Here will be running tests!"
+
+      # deploy
       - name: Push docker image
         run: docker push cr.yandex/$REGISTRY_ID/warehouse:v1
-      - name: Deploy kustomization
-        run: kubectl apply -k ./prod
-      - name: Deploy docker image
-        run: kubectl apply -f ./prod/warehouse.yaml
+      - name: Deploy application
+        run: envsubst < ./prod/warehouse.yaml | kubectl apply -f -
+      - name: Run load balancer
+        run: envsubst < ./prod/load-balancer.yaml | kubectl apply -f -
