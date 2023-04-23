@@ -34,6 +34,11 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: yc
+          path: ~/yandex-cloud
+      - name: Get all files from HOME
+        run: ls -l ~/
+      - name: Get all files from yandex-cloud
+        run: ls -l ~/yandex-cloud
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
