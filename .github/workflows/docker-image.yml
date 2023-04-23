@@ -18,48 +18,49 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Yandex Cloud
-        run: |
-          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
-          mv ~/yandex-cloud/bin/* /usr/local/bin/
-          which yc
-      - name: Create key.json
-        run: |
-          echo $YC_AUTH_KEY_JSON > key.json
-          cat key.json
-      - name: Configure profile for yc
-        run: |
-          yc config profile create bitbucket
-          yc config set service-account-key key.json
-      - name: Set up cloud-id
-        run: yc config set cloud-id $CLOUD_ID
-      - name: Set up folder-id
-        run: yc config set folder-id $FOLDER_ID
-      - name: Install kubectl
-        run: |
-          curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-          chmod +x ./kubectl
-          sudo mv kubectl /usr/local/bin/
-      - name: Set up k8s credentials
-        run: yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
-      - name: Set up docker registry
-        run: yc container registry configure-docker
-      - name: Set up env variables
-        run: echo $APPLICATION_ENV_DATA > ./prod/.env
-      - name: Build docker image
-        run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
-      - name: Deploy kustomization
-        run: kubectl apply -k ./prod
-      - name: Deploy docker image
-        run: kubectl apply -f ./prod/warehouse.yaml
-
+#      - uses: actions/checkout@v3
+#      - name: Install Yandex Cloud
+#        run: |
+#          curl -sSL https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash
+#          mv ~/yandex-cloud/bin/* /usr/local/bin/
+#          which yc
+#      - name: Create key.json
+#        run: |
+#          echo $YC_AUTH_KEY_JSON > key.json
+#          cat key.json
+#      - name: Configure profile for yc
+#        run: |
+#          yc config profile create bitbucket
+#          yc config set service-account-key key.json
+#      - name: Set up cloud-id
+#        run: yc config set cloud-id $CLOUD_ID
+#      - name: Set up folder-id
+#        run: yc config set folder-id $FOLDER_ID
+#      - name: Install kubectl
+#        run: |
+#          curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+#          chmod +x ./kubectl
+#          sudo mv kubectl /usr/local/bin/
+#      - name: Set up k8s credentials
+#        run: yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
+#      - name: Set up docker registry
+#        run: yc container registry configure-docker
+#      - name: Set up env variables
+#        run: echo $APPLICATION_ENV_DATA > ./prod/.env
+#      - name: Build docker image
+#        run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
+#      - name: Deploy kustomization
+#        run: kubectl apply -k ./prod
+#      - name: Deploy docker image
+#        run: kubectl apply -f ./prod/warehouse.yaml
+      - name: Create file
+        run: echo "hello world!" > /usr/local/bin/my-cool-file.txt
   build:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Check yc works
-        run: which yc
+      - name: Check created file
+        run: cat /usr/local/bin/my-cool-file.txt
       - name: Check kubectl all
         run: kubectl get all
 
