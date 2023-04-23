@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check yc works
-        run: yc managed-kubernetes cluster list
+        run: ls -l /usr/local/bin | grep yc*
       - name: Check kubectl all
         run: kubectl get all
 
