@@ -37,8 +37,13 @@ jobs:
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Set up docker registry
         run: ~/yandex-cloud/bin/yc container registry configure-docker
-      - name: Export yc
-        run: echo "::set-env name=YC_PATH::$(which yc)"
+      - name: Archive .kube config and yc into zip
+        run: zip yc-kube-config.zip ~/yandex-cloud/bin/yc ~/.kube/config
+      - name: Upload yc-kube-config artifact
+        uses: actions/upload-artifact@v2
+        with:
+         name: yc-kube-config
+         path: yc-kube-config.zip
 #      - name: Set up env variables
 #        run: echo $APPLICATION_ENV_DATA > ./prod/.env
 #      - name: Build docker image
@@ -51,10 +56,18 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Use yc CLI
-        env:
-          YC_PATH: ${{ env.YC_PATH }}
-        run: |
-          $YC_PATH managed-kubernetes cluster list
-
+      - name: Download yc-kube-config artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: yc-kube-config
+      - name: Extract yc and kubeconfig
+        run: | 
+          unzip yc-kube-config.zip
+          mv yc ~/yandex-cloud/bin
+          mkdir -p ~/.kube
+          mv config ~/.kube
+      - name: Use yc
+        run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
+      - name: Use kubectl
+        run: kubectl get all
 
