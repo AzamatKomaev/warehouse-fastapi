@@ -15,8 +15,13 @@ yc iam key create --service-account-name <service_account_name> --output key.jso
     <li><b>FOLDER_ID</b> - check step 6</li>
     <li><b>K8S_ID</b> - check step 7</li>
     <li><b>REGISTRY_ID</b> - check step 8</li>
-    <li><b>APPLICATION_ENV_DATA</b> - content of .env file. You have to create custom one with own variables based on ./prod/.env.example</li>
     <li><b>APP_IP</b> - IP address you application will be running. For more details check step 9</li>
+    <li><b>DB_NAME</b> - Database name</li>
+    <li><b>DB_USER_NAME</b> - Database username</li>
+    <li><b>DB_PASSWORD</b> - Database password</li>
+    <li><b>DB_HOST</b> - Database host</li>
+    <li><b>DB_PORT</b> - Database port</li>
+    <li><b>JWT_SECRET_KEY</b> - Token used to generate Json Web Tokens</li>
 </ul>
 
 5) How to get cloud id

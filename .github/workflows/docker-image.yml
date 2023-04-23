@@ -6,8 +6,13 @@ env:
   FOLDER_ID: ${{ secrets.FOLDER_ID }}
   K8S_ID: ${{ secrets.K8S_ID }}
   REGISTRY_ID: ${{ secrets.REGISTRY_ID }}
-  APPLICATION_ENV_DATA: ${{ secrets.APPLICATION_ENV_DATA }}
   APP_IP: ${{ secrets.APP_IP }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  DB_USER_NAME: ${{ secrets.DB_USER_NAME }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
 
 on:
   push:
@@ -39,11 +44,10 @@ jobs:
       - name: Set up docker registry
         run: cat ./key.json | docker login --username json_key --password-stdin cr.yandex
 
-      # build
-      - name: Set up env variables
-        run: echo $APPLICATION_ENV_DATA > ./prod/.env && . ./prod/.env
       - name: Get DB_PORT
         run: echo $DB_PORT
+      - name: Get DB_HOST
+        run: echo $DB_HOST
       - name: Build
         run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
       - name: Get images
