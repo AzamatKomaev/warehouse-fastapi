@@ -36,8 +36,7 @@ jobs:
       - name: Set up k8s credentials
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Set up docker registry
-#        run: cat ./key.json | docker login --username json_key --password-stdin cr.yandex
-        run: ~/yandex-cloud/bin/yc container registry configure-docker
+        run: cat ./key.json | docker login --username json_key --password-stdin cr.yandex
 
       # build
       - name: Set up env variables
