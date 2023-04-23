@@ -58,9 +58,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check kubectl all
-        run: which kubectl && kubectl get all
+        run: which kubectl
       - name: Check yc
-        run: which yc && yc && yc managed-kubernetes cluster list
+        run: which yc && yc managed-kubernetes cluster list
 
 
 
