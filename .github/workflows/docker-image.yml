@@ -12,6 +12,7 @@ env:
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   main:
@@ -41,6 +42,8 @@ jobs:
       # build
       - name: Set up env variables
         run: echo $APPLICATION_ENV_DATA > ./prod/.env && . ./prod/.env
+      - name: Get DB_PORT
+        run: echo $DB_PORT
       - name: Build
         run: docker build . --file Dockerfile --tag cr.yandex/$REGISTRY_ID/warehouse:v1
       - name: Get images
