@@ -35,6 +35,8 @@ jobs:
         with:
           name: yc
           path: ~/yandex-cloud
+      - name: Make yc executable
+        run: chmod +x ~/yandex-cloud/bin/yc
       - name: Get all files from yandex-cloud/bin
         run: ls -l ~/yandex-cloud/bin/
       - name: Create key.json
