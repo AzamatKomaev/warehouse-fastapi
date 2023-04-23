@@ -30,6 +30,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Download yc artifact
         uses: actions/download-artifact@master
         with:
