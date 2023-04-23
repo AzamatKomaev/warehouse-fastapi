@@ -40,7 +40,7 @@ jobs:
       - name: Archive .kube config and yc into zip
         run: zip yc-kube-config.zip ~/yandex-cloud/bin/yc ~/.kube/config
       - name: Upload yc-kube-config artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@master
         with:
          name: yc-kube-config
          path: yc-kube-config.zip
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download yc-kube-config artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@master
         with:
           name: yc-kube-config
       - name: Extract yc and kubeconfig
