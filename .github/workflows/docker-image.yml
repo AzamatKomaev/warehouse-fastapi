@@ -35,10 +35,8 @@ jobs:
         with:
           name: yc
           path: ~/yandex-cloud
-      - name: Get all files from HOME
-        run: ls -l ~/
-      - name: Get all files from yandex-cloud
-        run: ls -l ~/yandex-cloud
+      - name: Get all files from yandex-cloud/bin
+        run: ls -l ~/yandex-cloud/bin/
       - name: Create key.json
         run: |
           echo $YC_AUTH_KEY_JSON > key.json
