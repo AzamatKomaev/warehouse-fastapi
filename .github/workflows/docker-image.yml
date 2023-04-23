@@ -63,9 +63,7 @@ jobs:
       - name: Extract yc and kubeconfig
         run: | 
           unzip yc-kube-config.zip
-          mv yc ~/yandex-cloud/bin
-          mkdir -p ~/.kube
-          mv config ~/.kube
+          mv ./home/runner/* ~/
       - name: Use yc
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
       - name: Use kubectl
