@@ -16,7 +16,7 @@ on:
     branches: [ master ]
 
 jobs:
-  setup:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -39,8 +39,6 @@ jobs:
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Set up docker registry
         run: cat ./key.json | docker login --username json_key --password-stdin cr.yandex
-      - name: Check is docker registry configured
-        run: cat ~/.docker/config.json
 
       # build
       - name: Set up env variables
