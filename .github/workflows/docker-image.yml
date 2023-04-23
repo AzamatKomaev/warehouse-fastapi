@@ -9,8 +9,6 @@ env:
   APPLICATION_ENV_DATA: ${{ secrets.APPLICATION_ENV_DATA }}
   APP_IP: ${{ secrets.APP_IP }}
 
-#on: workflow_dispatch
-
 on:
   push:
     branches: [ master ]
