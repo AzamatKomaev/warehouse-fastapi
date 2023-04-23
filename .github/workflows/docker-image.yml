@@ -59,6 +59,8 @@ jobs:
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster list
       - name: Use kubectl
         run: kubectl get all
+      - name: pwd && ls -l
+        run: pwd && ls -l
       - name: Set up env variables
         run: echo $APPLICATION_ENV_DATA > ./prod/.env
       - name: Build docker image
