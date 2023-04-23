@@ -37,8 +37,8 @@ jobs:
       - name: Install kubectl
         run: |
           curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-          mv ./kubectl ~/
-          chmod +x ~/kubectl
+          chmod +x ./kubectl
+          sudo mv kubectl /usr/local/bin/
       - name: Set up k8s credentials
         run: ~/yandex-cloud/bin/yc managed-kubernetes cluster get-credentials --id=$K8S_ID --external
       - name: Set up docker registry
@@ -56,6 +56,6 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Check folders
-        run: ls -l ~
+      - name: Check kubectl all
+        run: kubectl get all
 
